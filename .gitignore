@@ -1,0 +1,8 @@
+/RPMS
+Makefile
+moc_*
+*.list
+*.so
+*.moc
+*.o
+*.user*
