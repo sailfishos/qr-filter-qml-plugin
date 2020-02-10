@@ -44,7 +44,7 @@ QVideoFrame VideoFilterRunnable::run(QVideoFrame *input, const QVideoSurfaceForm
         return {};
     }
 
-    if (m_future.isRunning()) {
+    if (m_future.isRunning() || !m_filter->m_enabled) {
         return *input;
     }
 
@@ -101,3 +101,19 @@ void QrFilter::setResult(const QString &result)
     m_result = result;
     emit resultChanged(m_result);
 }
+
+bool QrFilter::enabled() const
+{
+    return m_enabled;
+}
+
+void QrFilter::setEnabled(bool enabled)
+{
+    if (m_enabled == enabled)
+        return;
+
+    m_enabled = enabled;
+    emit enabledChanged(m_enabled);
+}
+
+
