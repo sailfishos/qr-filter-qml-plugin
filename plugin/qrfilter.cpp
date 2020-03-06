@@ -95,7 +95,7 @@ void QrFilter::clearResult()
 
 void QrFilter::setResult(const QString &result)
 {
-    if (result.isEmpty() || m_result == result)
+    if (!m_enabled || result.isEmpty() || m_result == result)
         return;
 
     m_result = result;
