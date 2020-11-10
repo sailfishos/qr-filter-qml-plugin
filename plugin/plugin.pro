@@ -2,7 +2,7 @@ TARGET  = $$qtLibraryTarget(qrfilter)
 
 TEMPLATE = lib
 CONFIG += plugin link_pkgconfig
-PKGCONFIG += QZXing
+PKGCONFIG += zxing
 
 QT -= gui
 QT += qml multimedia concurrent

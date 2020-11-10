@@ -10,10 +10,10 @@ BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5Quick)
 BuildRequires: pkgconfig(Qt5Multimedia)
 BuildRequires: pkgconfig(Qt5Concurrent)
-BuildRequires: pkgconfig(QZXing) >= 2.3
+BuildRequires: pkgconfig(zxing) >= 1.1.0
 
 %description
-QML QZXing wrapper with filter for QR-code reading from video stream.
+QML zxing wrapper with filter for QR-code reading from video stream.
 
 %prep
 %setup -q

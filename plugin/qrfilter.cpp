@@ -3,7 +3,9 @@
 #include <QDebug>
 #include <QFuture>
 #include <QtConcurrent>
-#include <QZXing.h>
+#include <ZXing/ReadBarcode.h>
+#include <ZXing/DecodeHints.h>
+#include <ZXing/Result.h>
 
 class VideoFilterRunnable : public QVideoFilterRunnable
 {
@@ -18,7 +20,7 @@ private:
     static void analyze(VideoFilterRunnable *runnable);
     QrFilter *m_filter = nullptr;
     QFuture<void> m_future;
-    QImage m_img;
+    QVideoSurfaceFormat m_surfaceFormat;
     QByteArray m_buffer;
 };
 
@@ -55,9 +57,7 @@ QVideoFrame VideoFilterRunnable::run(QVideoFrame *input, const QVideoSurfaceForm
         m_buffer.replace(0, m_buffer.size(), pBits, mappedSize);
         input->unmap();
 
-        m_img = QImage(reinterpret_cast<uchar*>(m_buffer.data()), surfaceFormat.frameWidth(),
-                       surfaceFormat.frameHeight(), QImage::Format_ARGB32);
-
+        m_surfaceFormat = surfaceFormat;
         m_future = QtConcurrent::run(analyze, this);
     }
 
@@ -66,10 +66,14 @@ QVideoFrame VideoFilterRunnable::run(QVideoFrame *input, const QVideoSurfaceForm
 
 void VideoFilterRunnable::analyze(VideoFilterRunnable *runnable)
 {
-    QZXing decoder;
-    decoder.setDecoder(QZXing::DecoderFormat_QR_CODE);
-    QString result = decoder.decodeImage(runnable->m_img);
-    runnable->m_filter->setResult(result);
+    ZXing::DecodeHints hints;
+    ZXing::Result result = ZXing::ReadBarcode(
+    { reinterpret_cast<uchar*>(runnable->m_buffer.data()),
+                               runnable->m_surfaceFormat.frameWidth(),
+                               runnable->m_surfaceFormat.frameHeight(),
+                               ZXing::ImageFormat::RGBX
+    }, hints);
+    runnable->m_filter->setResult(QString::fromStdWString(result.text()));
 }
 
 QrFilter::QrFilter(QObject *parent)
