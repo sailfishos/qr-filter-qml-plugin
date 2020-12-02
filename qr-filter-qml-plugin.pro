@@ -1,7 +1,8 @@
 TEMPLATE = subdirs
 
 SUBDIRS = \
-    plugin
+    plugin \
+    service
 
 OTHER_FILES += rpm/qrfilter.spec
 

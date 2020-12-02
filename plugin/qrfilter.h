@@ -11,7 +11,7 @@ class QrFilter : public QAbstractVideoFilter
 
 public:
     explicit QrFilter(QObject *parent = nullptr);
-    virtual ~QrFilter() = default;
+    virtual ~QrFilter() override = default;
 
     QVideoFilterRunnable *createFilterRunnable() override;
     QString result() const;
@@ -21,8 +21,8 @@ public:
     void setEnabled(bool enabled);
 
 signals:
-    void decodeFinished(QString result);
-    void resultChanged(QString result);
+    void decodeFinished(const QString &result);
+    void resultChanged(const QString &result);
     void enabledChanged(bool enabled);
 
 private:
