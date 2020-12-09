@@ -2,7 +2,6 @@
  * @file service.cpp
  * @copyright 2020 Open Mobile PLatform Ltd.
  * @author Dmitry Butakov d.butakov@omprussia.ru
- * @date 2020
  */
 
 #include "service.h"
@@ -21,13 +20,15 @@
 #include <unistd.h>
 #include <sys/mman.h>
 
-const char *Service::SERVICE_NAME = "org.sailfishos.zxing";
-const char *Service::OBJECT_PATH = "/org/sailfishos/zxing";
+const char *SERVICE_NAME = "org.sailfishos.zxing";
+const char *OBJECT_PATH = "/org/sailfishos/zxing";
 
 Service::Service(QObject *parent)
     : QObject(parent),
       QDBusContext()
 {
+    new ZxingAdaptor(this);
+
     QDBusConnection connection = QDBusConnection::systemBus();
     if (!connection.registerObject(OBJECT_PATH, this)) {
         qFatal("Cannot register object at %s", OBJECT_PATH);
@@ -45,8 +46,6 @@ Service::Service(QObject *parent)
 
     connect(&m_autoclose, SIGNAL(timeout()),
             this, SLOT(quit()));
-
-    new ZxingAdaptor(this);
 
     m_autoclose.start();
 }

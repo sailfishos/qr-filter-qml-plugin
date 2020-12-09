@@ -1,3 +1,9 @@
+/**
+ * @file videofilterrunnable.cpp
+ * @copyright 2020 Open Mobile PLatform Ltd.
+ * @author Dmitry Butakov d.butakov@omprussia.ru
+ */
+
 #ifndef VIDEOFILTERRUNNABLE_H
 #define VIDEOFILTERRUNNABLE_H
 

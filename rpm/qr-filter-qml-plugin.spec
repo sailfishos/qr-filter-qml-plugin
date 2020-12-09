@@ -1,5 +1,5 @@
 Name:       qr-filter-qml-plugin
-Summary:    Service for working with QR, Bar-codes
+Summary:    QR code qml wrappper based on ZXing
 Version:    1.1.0
 Release:    1
 Group:      System/Libraries
@@ -12,7 +12,7 @@ BuildRequires: pkgconfig(Qt5Multimedia)
 BuildRequires: pkgconfig(zxing) >= 1.1.0
 
 %description
-Service for working with QR, Bar-codes based on ZXing.
+QML zxing wrapper with filter for QR-code reading from video stream.
 
 %prep
 %setup -q
@@ -24,16 +24,12 @@ Service for working with QR, Bar-codes based on ZXing.
 %install
 %make_install
 
-%post
-/sbin/ldconfig
-# kill in case if old daemon is still running
-killall zxing-daemon || :
-
+%post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
 
 %files
 %defattr(-,root,root,-)
-%{_bindir}/zxing-daemon
+%{_libexecdir}/zxing-daemon
 %{_unitdir}/*.service
 %{_datadir}/dbus-1/system-services/*.service
 %{_sysconfdir}/dbus-1/system.d/*.conf

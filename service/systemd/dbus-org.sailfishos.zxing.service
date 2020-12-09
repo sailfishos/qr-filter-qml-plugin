@@ -4,4 +4,4 @@ Description=ZXing service
 [Service]
 Type=dbus
 BusName=org.sailfishos.zxing
-ExecStart=/usr/bin/zxing-daemon
+ExecStart=/usr/libexec/zxing-daemon

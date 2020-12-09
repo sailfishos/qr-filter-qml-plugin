@@ -1,3 +1,9 @@
+/**
+ * @file qrfilter.cpp
+ * @copyright 2020 Open Mobile PLatform Ltd.
+ * @author Dmitry Butakov d.butakov@omprussia.ru
+ */
+
 #include "qrfilter.h"
 #include "videofilterrunnable.h"
 

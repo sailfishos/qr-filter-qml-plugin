@@ -1,3 +1,9 @@
+/**
+ * @file videofilterrunnable.cpp
+ * @copyright 2020 Open Mobile PLatform Ltd.
+ * @author Dmitry Butakov d.butakov@omprussia.ru
+ */
+
 #include "videofilterrunnable.h"
 
 #include <QDebug>
@@ -69,18 +75,18 @@ QVideoFrame VideoFilterRunnable::run(QVideoFrame *input, const QVideoSurfaceForm
         auto pBits = reinterpret_cast<char*>(input->bits());
         m_bufferSize = static_cast<uint>(input->mappedBytes());
 
-        // Genereate tmp frame buffer and unlink immediatly to avoid frame collision
+        // Generate tmp frame buffer and unlink immediately to avoid frame collision
         const char *tmpFrameBufferName =  getRandomString().toStdString().c_str();
         int fd = shm_open(tmpFrameBufferName, O_RDWR | O_CREAT, 0777);
 
         if (fd != -1) {
             shm_unlink(tmpFrameBufferName);
-            if (write(fd, pBits, m_bufferSize) != -1) {
+            if (write(fd, pBits, m_bufferSize) == m_bufferSize) {
                 m_surfaceFormat = surfaceFormat;
                 m_fd.setFileDescriptor(fd);
                 analyze();
             } else {
-                 qDebug() << "write():" << strerror(errno);
+                qDebug() << "write():" << strerror(errno);
             }
             close(fd);
         } else {
@@ -105,5 +111,5 @@ void VideoFilterRunnable::analyze()
     args.append(m_surfaceFormat.frameWidth());
     args.append(m_surfaceFormat.frameHeight());
     message.setArguments(args);
-    m_reply =  QDBusConnection::systemBus().asyncCall(message);
+    m_reply = QDBusConnection::systemBus().asyncCall(message);
 }

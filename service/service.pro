@@ -11,7 +11,7 @@ SOURCES = \
     service.cpp \
     main.cpp
 
-target.path = /usr/bin/
+target.path = /usr/libexec
 
 DBUS_SERVICE_NAME=org.sailfishos.zxing
 

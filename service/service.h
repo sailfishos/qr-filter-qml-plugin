@@ -2,7 +2,6 @@
  * @file service.h
  * @copyright 2020 Open Mobile PLatform Ltd.
  * @author Dmitry Butakov d.butakov@omprussia.ru
- * @date 2020
  */
 
 #ifndef SERVICE_H
@@ -26,9 +25,6 @@ public slots:
 
 private:
     QTimer m_autoclose;
-
-    static const char *SERVICE_NAME;
-    static const char *OBJECT_PATH;
 };
 
 #endif // SERVICE_H

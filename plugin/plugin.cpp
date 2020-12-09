@@ -1,3 +1,9 @@
+/**
+ * @file plugin.cpp
+ * @copyright 2020 Open Mobile PLatform Ltd.
+ * @author Dmitry Butakov d.butakov@omprussia.ru
+ */
+
 #include <QQmlExtensionPlugin>
 #include <QtQml>
 

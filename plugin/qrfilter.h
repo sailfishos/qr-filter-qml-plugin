@@ -1,3 +1,9 @@
+/**
+ * @file qrfilter.h
+ * @copyright 2020 Open Mobile PLatform Ltd.
+ * @author Dmitry Butakov d.butakov@omprussia.ru
+ */
+
 #ifndef QRFILTER_H
 #define QRFILTER_H
 
