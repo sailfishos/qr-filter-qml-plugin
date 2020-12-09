@@ -1,2 +1,2 @@
-module ru.omprussia.qrfilter
+module Sailfish.QrFilter
 plugin qrfilter

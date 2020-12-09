@@ -37,4 +37,4 @@ killall zxing-daemon || :
 %{_unitdir}/*.service
 %{_datadir}/dbus-1/system-services/*.service
 %{_sysconfdir}/dbus-1/system.d/*.conf
-%{_libdir}/qt5/qml/ru/omprussia/qrfilter/*
+%{_libdir}/qt5/qml/Sailfish/QrFilter/*
