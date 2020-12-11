@@ -14,10 +14,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#define FRAME_ANALYSIS_RATE 10
-
-VideoFilterRunnable::VideoFilterRunnable(QrFilter *filter)
-    : m_filter(filter), m_frameCounter(0)
+VideoFilterRunnable::VideoFilterRunnable(QrFilter *filter) : m_filter(filter)
 {
     connect(this, &VideoFilterRunnable::stringFound,
             m_filter, &QrFilter::setResult, Qt::QueuedConnection);
@@ -30,8 +27,7 @@ static QString getRandomString()
    const int randomStringLength = 12;
 
    QString randomString;
-   for(int i = 0; i < randomStringLength; ++i)
-   {
+   for (int i = 0; i < randomStringLength; ++i) {
        int index = qrand() % possibleCharacters.length();
        QChar nextChar = possibleCharacters.at(index);
        randomString.append(nextChar);
@@ -44,72 +40,70 @@ QVideoFrame VideoFilterRunnable::run(QVideoFrame *input, const QVideoSurfaceForm
 {
     Q_UNUSED(flags)
 
-    if (m_reply.isValid()) {
-        if (m_reply.isFinished()) {
-            if (m_reply.isError()) {
-                qWarning() << "QR Filter error" << m_reply.error().message();
-            } else {
-                QString result = m_reply.value();
-                if (!result.isEmpty()) {
-                    emit stringFound(result);
-                }
-            }
-            m_reply = QDBusPendingReply<QString>();
-        } else {
-            return *input;
+    auto in = !input ? QVideoFrame() : *input;
+    if (!m_reply.isFinished()) {
+        return in;
+    }
+
+    if (m_reply.isError()) {
+        qWarning() << "QR Filter error" << m_reply.error().message();
+    } else {
+        QString msg = m_reply.value();
+        if (!msg.isEmpty()) {
+            emit stringFound(msg);
         }
     }
+    m_reply = QDBusPendingReply<QString>();
 
-    if (!input || !input->isValid()) {
-        qWarning() << "Invalid input video frame!";
-        return {};
+    if (!in.isValid()) {
+        return in;
     }
 
-    if (m_frameCounter < FRAME_ANALYSIS_RATE) {
-        ++m_frameCounter;
-        return *input;
+    if (!in.map(QAbstractVideoBuffer::ReadOnly)) {
+        return in;
     }
 
-    m_frameCounter = 0;
-    if (input->map(QAbstractVideoBuffer::ReadOnly)) {
-        auto pBits = reinterpret_cast<char*>(input->bits());
-        m_bufferSize = static_cast<uint>(input->mappedBytes());
+    auto pBits = reinterpret_cast<char*>(in.bits());
+    auto bufferSize = static_cast<uint>(in.mappedBytes());
 
-        // Generate tmp frame buffer and unlink immediately to avoid frame collision
-        const char *tmpFrameBufferName =  getRandomString().toStdString().c_str();
-        int fd = shm_open(tmpFrameBufferName, O_RDWR | O_CREAT, 0777);
+    // Generate tmp frame buffer and unlink immediately to avoid frame collision
+    const char *tmpFrameBufferName =  getRandomString().toStdString().c_str();
+    int fd = shm_open(tmpFrameBufferName, O_RDWR | O_CREAT, 0777);
 
-        if (fd != -1) {
-            shm_unlink(tmpFrameBufferName);
-            if (write(fd, pBits, m_bufferSize) == m_bufferSize) {
-                m_surfaceFormat = surfaceFormat;
-                m_fd.setFileDescriptor(fd);
-                analyze();
-            } else {
-                qDebug() << "write():" << strerror(errno);
+    if (fd != -1) {
+        shm_unlink(tmpFrameBufferName);
+        ssize_t wr = write(fd, pBits, bufferSize);
+        if (wr > 0) {
+            if (static_cast<size_t>(wr) == bufferSize) {
+                QDBusUnixFileDescriptor dbus_fd(fd);
+                analyze(dbus_fd, bufferSize, surfaceFormat);
+            }  else {
+                qDebug() << "Written " << wr << " bytes of" << bufferSize;
             }
-            close(fd);
         } else {
-            qDebug() << "shm_open():" << strerror(errno);
+            qDebug() << "write():" << strerror(errno);
         }
-
-        input->unmap();
+        close(fd);
+    } else {
+        qDebug() << "shm_open():" << strerror(errno);
     }
-
-    return *input;
+    in.unmap();
+    return in;
 }
 
-void VideoFilterRunnable::analyze()
+void VideoFilterRunnable::analyze(QDBusUnixFileDescriptor fd, uint bufferSize,
+                                QVideoSurfaceFormat surfaceFormat)
 {
     QDBusMessage message = QDBusMessage::createMethodCall("org.sailfishos.zxing",
                                                           "/org/sailfishos/zxing",
                                                           "org.sailfishos.zxing",
-                                                          "decodeFromMemory");
+                                                          "decodeFromDescriptor");
     QList<QVariant> args;
-    args.append(QVariant::fromValue(m_fd));
-    args.append(m_bufferSize);
-    args.append(m_surfaceFormat.frameWidth());
-    args.append(m_surfaceFormat.frameHeight());
+    args.append(QVariant::fromValue(fd));
+    args.append(bufferSize);
+    args.append(surfaceFormat.frameWidth());
+    args.append(surfaceFormat.frameHeight());
+    args.append(surfaceFormat.pixelFormat());
     message.setArguments(args);
-    m_reply = QDBusConnection::systemBus().asyncCall(message);
+    m_reply = QDBusConnection::sessionBus().asyncCall(message);
 }

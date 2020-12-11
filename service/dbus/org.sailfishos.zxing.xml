@@ -25,12 +25,13 @@
 
 <node name="/org/sailfishos/zxing">
   <interface name="org.sailfishos.zxing">
-    <method name="decodeFromMemory">
+    <method name="decodeFromDescriptor">
       <arg direction="out" type="s" name="result"/>
       <arg direction="in" type="h" name="descriptor"/>
       <arg direction="in" type="u" name="buffer_size"/>
       <arg direction="in" type="i" name="width"/>
       <arg direction="in" type="i" name="height"/>
+      <arg direction="in" type="i" name="pixelFormat"/>
     </method>
     <method name="quit">
     </method>

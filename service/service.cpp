@@ -12,7 +12,10 @@
 #include <QDBusReply>
 #include <QDBusMessage>
 #include <QDebug>
+#include <QFile>
+#include <QVideoSurfaceFormat>
 
+#include <ZXing/BarcodeFormat.h>
 #include <ZXing/ReadBarcode.h>
 #include <ZXing/DecodeHints.h>
 #include <ZXing/Result.h>
@@ -29,7 +32,7 @@ Service::Service(QObject *parent)
 {
     new ZxingAdaptor(this);
 
-    QDBusConnection connection = QDBusConnection::systemBus();
+    QDBusConnection connection = QDBusConnection::sessionBus();
     if (!connection.registerObject(OBJECT_PATH, this)) {
         qFatal("Cannot register object at %s", OBJECT_PATH);
     }
@@ -54,21 +57,53 @@ Service::~Service()
 {
 }
 
-QString Service::decodeFromMemory(QDBusUnixFileDescriptor fd,
-                                  uint size, int width, int height)
+static ZXing::ImageFormat detectFormat(int pixelFormat)
+{
+    switch (pixelFormat) {
+    case QVideoFrame::Format_ARGB32:
+        return ZXing::ImageFormat::XRGB;
+    case QVideoFrame::Format_ARGB32_Premultiplied:
+        return ZXing::ImageFormat::XRGB;
+    case QVideoFrame::Format_RGB32:
+        return ZXing::ImageFormat::RGB;
+    case QVideoFrame::Format_BGRA32:
+        return ZXing::ImageFormat::BGRX;
+    case QVideoFrame::Format_BGRA32_Premultiplied:
+        return ZXing::ImageFormat::BGRX;
+    case QVideoFrame::Format_BGR32:
+        return ZXing::ImageFormat::BGR;
+    default:
+        return ZXing::ImageFormat::None;
+    }
+}
+
+QString Service::decodeFromDescriptor(QDBusUnixFileDescriptor fd,
+                                  uint size, int width, int hegiht, int pixelFormat)
 {
     m_autoclose.stop();
     QString response;
-    uchar *buf = static_cast<uchar*>(mmap(nullptr, size,
-                                               PROT_READ, MAP_SHARED, fd.fileDescriptor(), 0));
+    QFile mf;
+    if (mf.open(fd.fileDescriptor(), QIODevice::ReadOnly)) {
+        uchar *buf = mf.map(0, size);
 
-    if (buf != MAP_FAILED) {
-        ZXing::DecodeHints hints;
-        ZXing::Result result = ZXing::ReadBarcode(
-        { buf, width, height, ZXing::ImageFormat::RGBX }, hints);
-        response = QString::fromStdWString(result.text());
+        if (buf != nullptr) {
+            ZXing::DecodeHints hints;
+            hints.setFormats(ZXing::BarcodeFormat::QR_CODE);
+            ZXing::ImageFormat format = detectFormat(pixelFormat);
+
+            if (format != ZXing::ImageFormat::None) {
+                ZXing::Result result = ZXing::ReadBarcode(
+                { buf, width, hegiht, format}, hints);
+                response = QString::fromStdWString(result.text());
+            } else {
+                qWarning() << "Input frame format is not supported by ZXing: "
+                           << pixelFormat;
+            }
+        } else {
+            qWarning() << "map():" << mf.error();
+        }
     } else {
-        qWarning() << "decodFromMemory():" << strerror(errno);
+        qWarning() << "open():" << mf.error();
     }
 
     m_autoclose.start();

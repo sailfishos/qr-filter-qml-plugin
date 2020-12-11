@@ -20,7 +20,8 @@ public:
     virtual ~Service();
 
 public slots:
-    QString decodeFromMemory(QDBusUnixFileDescriptor fd, uint size, int width, int height);
+    QString decodeFromDescriptor(QDBusUnixFileDescriptor fd,
+            uint size, int width, int height, int pixelFormat);
     void quit();
 
 private:

@@ -27,13 +27,10 @@ signals:
     void stringFound(const QString &result);
 
 private:
-    void analyze();
+    void analyze(QDBusUnixFileDescriptor fd, uint bufferSize,
+                 QVideoSurfaceFormat surfaceFormat);
     QrFilter *m_filter = nullptr;
-    QVideoSurfaceFormat m_surfaceFormat;
     QDBusPendingReply<QString> m_reply;
-    QDBusUnixFileDescriptor m_fd;
-    size_t m_bufferSize;
-    int m_frameCounter;
 };
 
 #endif // VIDEOFILTERRUNNABLE_H

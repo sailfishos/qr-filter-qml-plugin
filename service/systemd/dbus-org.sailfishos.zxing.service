@@ -1,7 +1,0 @@
-[Unit]
-Description=ZXing service
-
-[Service]
-Type=dbus
-BusName=org.sailfishos.zxing
-ExecStart=/usr/libexec/zxing-daemon

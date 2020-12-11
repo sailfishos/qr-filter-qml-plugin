@@ -1,7 +1,4 @@
 [D-BUS Service]
-Interface=org.sailfishos.zxing
 Name=org.sailfishos.zxing
-Exec=/bin/false
-User=root
-SystemdService=dbus-org.sailfishos.zxing.service
-
+Exec=/usr/libexec/zxing-daemon
+User=defaultuser

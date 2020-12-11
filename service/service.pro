@@ -1,6 +1,6 @@
 TARGET = zxing-daemon
 
-QT = core dbus
+QT = core dbus multimedia
 CONFIG += link_pkgconfig
 PKGCONFIG += zxing
 
@@ -19,13 +19,7 @@ zxing_dbus_adaptor.files = ./dbus/$${DBUS_SERVICE_NAME}.xml
 zxing_dbus_adaptor.source_flags = -c ZxingAdaptor
 DBUS_ADAPTORS += zxing_dbus_adaptor
 
-systemd.files = ./systemd/dbus-$${DBUS_SERVICE_NAME}.service
-systemd.path = /usr/lib/systemd/system/
-
 service.files = ./dbus/$${DBUS_SERVICE_NAME}.service
-service.path = /usr/share/dbus-1/system-services/
+service.path = /usr/share/dbus-1/services/
 
-conf.files = ./dbus/$${DBUS_SERVICE_NAME}.conf
-conf.path = /etc/dbus-1/system.d/
-
-INSTALLS += systemd service conf target
+INSTALLS += service target
