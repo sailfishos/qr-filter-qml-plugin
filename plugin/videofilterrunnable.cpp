@@ -18,6 +18,9 @@ VideoFilterRunnable::VideoFilterRunnable(QrFilter *filter) : m_filter(filter)
 {
     connect(this, &VideoFilterRunnable::stringFound,
             m_filter, &QrFilter::setResult, Qt::QueuedConnection);
+    // analyze empty frame to establish D-Bus connection
+    analyze(QDBusUnixFileDescriptor(0), 0,
+            QVideoSurfaceFormat(QSize(0,0), QVideoFrame::PixelFormat::Format_BGRA32));
 }
 
 static QString getRandomString()
