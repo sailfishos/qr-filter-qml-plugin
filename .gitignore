@@ -7,3 +7,5 @@ moc_*
 *.o
 *.user*
 .vscode
+service/zxing-daemon
+service/zxing_adaptor.*
