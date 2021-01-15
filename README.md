@@ -1,0 +1,1 @@
+# qr-filter-qml-plugin
