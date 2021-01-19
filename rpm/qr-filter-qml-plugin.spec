@@ -1,10 +1,9 @@
 Name:       qr-filter-qml-plugin
 Summary:    QR code qml wrappper based on ZXing
-Version:    1.1.0
+Version:    1.0
 Release:    1
-Group:      System/Libraries
-License:    Apache License 2.0
-URL:        https://git.omprussia.ru/os/qr-filter-qml-plugin
+License:    ASL 2.0
+URL:        https://github.com/sailfishos/qr-filter-qml-plugin
 Source:     %{name}-%{version}.tar.bz2
 BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5Quick)

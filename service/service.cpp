@@ -57,7 +57,7 @@ Service::~Service()
 {
 }
 
-static ZXing::ImageFormat detectFormat(int pixelFormat)
+static ZXing::ImageFormat convertFormat(int pixelFormat)
 {
     switch (pixelFormat) {
     case QVideoFrame::Format_ARGB32:
@@ -78,7 +78,7 @@ static ZXing::ImageFormat detectFormat(int pixelFormat)
 }
 
 QString Service::decodeFromDescriptor(QDBusUnixFileDescriptor fd,
-                                  uint size, int width, int hegiht, int pixelFormat)
+                                  uint size, int width, int height, int pixelFormat)
 {
     m_autoclose.stop();
     QString response;
@@ -89,11 +89,11 @@ QString Service::decodeFromDescriptor(QDBusUnixFileDescriptor fd,
         if (buf != nullptr) {
             ZXing::DecodeHints hints;
             hints.setFormats(ZXing::BarcodeFormat::QR_CODE);
-            ZXing::ImageFormat format = detectFormat(pixelFormat);
+            ZXing::ImageFormat format = convertFormat(pixelFormat);
 
             if (format != ZXing::ImageFormat::None) {
                 ZXing::Result result = ZXing::ReadBarcode(
-                { buf, width, hegiht, format}, hints);
+                { buf, width, height, format}, hints);
                 response = QString::fromStdWString(result.text());
             } else {
                 qWarning() << "Input frame format is not supported by ZXing: "

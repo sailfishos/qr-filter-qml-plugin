@@ -70,7 +70,7 @@ QVideoFrame VideoFilterRunnable::run(QVideoFrame *input, const QVideoSurfaceForm
     auto bufferSize = static_cast<uint>(in.mappedBytes());
 
     // Generate tmp frame buffer and unlink immediately to avoid frame collision
-    const char *tmpFrameBufferName =  getRandomString().toStdString().c_str();
+    const char *tmpFrameBufferName = getRandomString().toStdString().c_str();
     int fd = shm_open(tmpFrameBufferName, O_RDWR | O_CREAT, 0777);
 
     if (fd != -1) {
