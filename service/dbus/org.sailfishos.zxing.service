@@ -1,4 +1,3 @@
 [D-BUS Service]
 Name=org.sailfishos.zxing
 Exec=/usr/libexec/zxing-daemon
-User=defaultuser
