@@ -8,6 +8,7 @@ Source:     %{name}-%{version}.tar.bz2
 BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5Quick)
 BuildRequires: pkgconfig(Qt5Multimedia)
+BuildRequires: pkgconfig(Qt5DBus)
 BuildRequires: pkgconfig(zxing) >= 1.1.0
 
 %description
