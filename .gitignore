@@ -1,0 +1,11 @@
+/RPMS
+Makefile
+moc_*
+*.list
+*.so
+*.moc
+*.o
+*.user*
+.vscode
+service/zxing-daemon
+service/zxing_adaptor.*
