@@ -18,6 +18,7 @@ VideoFilterRunnable::VideoFilterRunnable(QrFilter *filter) : m_filter(filter)
 {
     connect(this, &VideoFilterRunnable::stringFound,
             m_filter, &QrFilter::setResult, Qt::QueuedConnection);
+    m_timer.start();
     // analyze empty frame to establish D-Bus connection
     analyze(QDBusUnixFileDescriptor(0), 0,
             QVideoSurfaceFormat(QSize(0,0), QVideoFrame::PixelFormat::Format_BGRA32));
@@ -56,11 +57,16 @@ QVideoFrame VideoFilterRunnable::run(QVideoFrame *input, const QVideoSurfaceForm
             emit stringFound(msg);
         }
     }
-    m_reply = QDBusPendingReply<QString>();
 
     if (!in.isValid()) {
         return in;
     }
+
+    if (!m_timer.hasExpired(500)) {
+        return in;
+    }
+    m_timer.restart();
+    m_reply = QDBusPendingReply<QString>();
 
     if (!in.map(QAbstractVideoBuffer::ReadOnly)) {
         return in;

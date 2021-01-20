@@ -12,6 +12,7 @@
 #include <QtDBus/QDBusUnixFileDescriptor>
 #include <QtDBus/QDBusPendingReply>
 #include <QVideoFilterRunnable>
+#include <QElapsedTimer>
 
 class VideoFilterRunnable : public QObject, public QVideoFilterRunnable
 {
@@ -31,6 +32,7 @@ private:
                  QVideoSurfaceFormat surfaceFormat);
     QrFilter *m_filter = nullptr;
     QDBusPendingReply<QString> m_reply;
+    QElapsedTimer m_timer;
 };
 
 #endif // VIDEOFILTERRUNNABLE_H
