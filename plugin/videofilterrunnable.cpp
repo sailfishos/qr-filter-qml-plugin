@@ -101,7 +101,7 @@ QVideoFrame VideoFilterRunnable::run(QVideoFrame *input, const QVideoSurfaceForm
 }
 
 void VideoFilterRunnable::analyze(QDBusUnixFileDescriptor fd, uint bufferSize,
-                                QVideoSurfaceFormat surfaceFormat)
+                                  QVideoSurfaceFormat surfaceFormat)
 {
     QDBusMessage message = QDBusMessage::createMethodCall("org.sailfishos.zxing",
                                                           "/org/sailfishos/zxing",
