@@ -10,12 +10,6 @@
 QrFilter::QrFilter(QObject *parent)
     : QAbstractVideoFilter(parent)
 {
-    connect(this, &QrFilter::activeChanged, this, [=]{
-        if (!isActive()) {
-            m_result.clear();
-            emit resultChanged(m_result);
-        }
-    });
 }
 
 QVideoFilterRunnable *QrFilter::createFilterRunnable()
@@ -33,9 +27,14 @@ QString QrFilter::result() const
 
 void QrFilter::setResult(const QString &result)
 {
-    if (!isActive() || result.isEmpty() || m_result == result)
+    if (m_result == result)
         return;
 
     m_result = result;
     emit resultChanged(m_result);
+}
+
+void QrFilter::clearResult()
+{
+    setResult(QString());
 }

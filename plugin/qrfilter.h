@@ -22,6 +22,8 @@ public:
     QString result() const;
     void setResult(const QString &result);
 
+    Q_INVOKABLE void clearResult();
+
 signals:
     void decodeFinished(const QString &result);
     void resultChanged(const QString &result);
