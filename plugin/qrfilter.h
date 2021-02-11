@@ -1,6 +1,6 @@
 /**
  * @file qrfilter.h
- * @copyright 2020 Open Mobile PLatform Ltd.
+ * @copyright 2020 Open Mobile Platform LLC.
  * @author Dmitry Butakov d.butakov@omprussia.ru
  */
 

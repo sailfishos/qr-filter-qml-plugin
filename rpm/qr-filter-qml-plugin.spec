@@ -29,6 +29,7 @@ QML zxing wrapper with filter for QR-code reading from video stream.
 
 %files
 %defattr(-,root,root,-)
+%license LICENSE
 %{_libexecdir}/zxing-daemon
 %{_datadir}/dbus-1/services/*.service
 %{_libdir}/qt5/qml/Sailfish/QrFilter/*
