@@ -5,7 +5,7 @@
 ## How to use
 Plugin based on `VideoOutput` qml-feature - filters.
 ```qml
-import Sailfish.QrFilter 1.0
+import Amber.QrFilter 1.0
 
 VideoOutput {
     id: videoOutput

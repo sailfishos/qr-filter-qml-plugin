@@ -103,9 +103,9 @@ QVideoFrame VideoFilterRunnable::run(QVideoFrame *input, const QVideoSurfaceForm
 void VideoFilterRunnable::analyze(QDBusUnixFileDescriptor fd, uint bufferSize,
                                   QVideoSurfaceFormat surfaceFormat)
 {
-    QDBusMessage message = QDBusMessage::createMethodCall("org.sailfishos.zxing",
-                                                          "/org/sailfishos/zxing",
-                                                          "org.sailfishos.zxing",
+    QDBusMessage message = QDBusMessage::createMethodCall("org.amberapi.zxing",
+                                                          "/org/amberapi/zxing",
+                                                          "org.amberapi.zxing",
                                                           "decodeFromDescriptor");
     QList<QVariant> args;
     args.append(QVariant::fromValue(fd));

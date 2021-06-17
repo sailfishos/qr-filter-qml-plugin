@@ -12,7 +12,7 @@
 class Q_DECL_EXPORT QrFilterPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT
-    Q_PLUGIN_METADATA(IID "org.sailfishos.qrfilter")
+    Q_PLUGIN_METADATA(IID "Amber.QrFilter")
 
 public:
     QrFilterPlugin() = default;
@@ -20,7 +20,7 @@ public:
 
     void registerTypes(const char *uri) override
     {
-        Q_ASSERT(QLatin1String(uri) == QStringLiteral("org.sailfishos.qrfilter"));
+        Q_ASSERT(QLatin1String(uri) == QStringLiteral("Amber.QrFilter"));
         qmlRegisterType<QrFilter>(uri, 1, 0, "QrFilter");
     }
 };

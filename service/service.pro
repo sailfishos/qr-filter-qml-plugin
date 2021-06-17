@@ -13,7 +13,7 @@ SOURCES = \
 
 target.path = /usr/libexec
 
-DBUS_SERVICE_NAME=org.sailfishos.zxing
+DBUS_SERVICE_NAME=org.amberapi.zxing
 
 zxing_dbus_adaptor.files = ./dbus/$${DBUS_SERVICE_NAME}.xml
 zxing_dbus_adaptor.source_flags = -c ZxingAdaptor
