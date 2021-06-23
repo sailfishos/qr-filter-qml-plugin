@@ -23,8 +23,8 @@
  **/
 -->
 
-<node name="/org/sailfishos/zxing">
-  <interface name="org.sailfishos.zxing">
+<node name="/org/amberapi/zxing">
+  <interface name="org.amberapi.zxing">
     <method name="decodeFromDescriptor">
       <arg direction="out" type="s" name="result"/>
       <arg direction="in" type="h" name="descriptor"/>

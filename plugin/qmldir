@@ -1,2 +1,2 @@
-module Sailfish.QrFilter
+module Amber.QrFilter
 plugin qrfilter

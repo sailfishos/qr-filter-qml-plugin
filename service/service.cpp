@@ -23,8 +23,8 @@
 #include <unistd.h>
 #include <sys/mman.h>
 
-const char *SERVICE_NAME = "org.sailfishos.zxing";
-const char *OBJECT_PATH = "/org/sailfishos/zxing";
+const char *SERVICE_NAME = "org.amberapi.zxing";
+const char *OBJECT_PATH = "/org/amberapi/zxing";
 
 Service::Service(QObject *parent)
     : QObject(parent),

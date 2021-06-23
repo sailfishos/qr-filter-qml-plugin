@@ -5,7 +5,7 @@ CONFIG += plugin
 
 QT = core dbus qml multimedia
 
-target.path = $$[QT_INSTALL_QML]/Sailfish/QrFilter
+target.path = $$[QT_INSTALL_QML]/Amber/QrFilter
 qmldir.files += qmldir
 qmldir.path +=  $$target.path
 
