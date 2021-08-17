@@ -18,4 +18,10 @@ HEADERS += \
         qrfilter.h \
         videofilterrunnable.h
 
-INSTALLS += target qmldir
+qmltypes.files += plugins.qmltypes
+qmltypes.path +=  $$target.path
+qmltypes.commands = qmlplugindump -nonrelocatable Amber.QrFilter 1.0 > $$PWD/plugins.qmltypes
+
+QMAKE_EXTRA_TARGETS += qmltypes
+
+INSTALLS += target qmldir qmltypes
