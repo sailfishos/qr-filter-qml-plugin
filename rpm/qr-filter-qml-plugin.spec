@@ -1,6 +1,6 @@
 Name:       qr-filter-qml-plugin
 Summary:    QR code qml wrappper based on ZXing
-Version:    1.0
+Version:    1.1
 Release:    1
 License:    ASL 2.0
 URL:        https://github.com/sailfishos/qr-filter-qml-plugin
@@ -9,7 +9,7 @@ BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5Quick)
 BuildRequires: pkgconfig(Qt5Multimedia)
 BuildRequires: pkgconfig(Qt5DBus)
-BuildRequires: pkgconfig(zxing) >= 1.1.0
+BuildRequires: pkgconfig(zxing) >= 2.0.0
 
 %description
 QML zxing wrapper with filter for QR-code reading from video stream.

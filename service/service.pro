@@ -2,6 +2,7 @@ TARGET = zxing-daemon
 
 QT = core dbus multimedia
 CONFIG += link_pkgconfig
+CONFIG += c++1z
 PKGCONFIG += zxing
 
 HEADERS = \

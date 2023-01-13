@@ -88,13 +88,14 @@ QString Service::decodeFromDescriptor(QDBusUnixFileDescriptor fd,
 
         if (buf != nullptr) {
             ZXing::DecodeHints hints;
-            hints.setFormats(ZXing::BarcodeFormat::QR_CODE);
+            hints.setFormats(ZXing::BarcodeFormat::QRCode);
             ZXing::ImageFormat format = convertFormat(pixelFormat);
+            hints.setTryInvert(true);
 
             if (format != ZXing::ImageFormat::None) {
                 ZXing::Result result = ZXing::ReadBarcode(
                 { buf, width, height, format}, hints);
-                response = QString::fromStdWString(result.text());
+                response = QString::fromStdString(result.text());
             } else {
                 qWarning() << "Input frame format is not supported by ZXing: "
                            << pixelFormat;
