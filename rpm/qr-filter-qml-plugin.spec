@@ -22,7 +22,7 @@ QML zxing wrapper with filter for QR-code reading from video stream.
 %make_build
 
 %install
-%make_install
+%qmake5_install
 
 %post -p /sbin/ldconfig
 %postun -p /sbin/ldconfig
