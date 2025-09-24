@@ -20,11 +20,35 @@
 #include <ZXing/DecodeHints.h>
 #include <ZXing/Result.h>
 
+#include <QImage>
+#include <BitMatrix.h>
+#include <BitMatrixIO.h>
+#include <ZXing/CharacterSet.h>
+#include <ZXing/MultiFormatWriter.h>
+
 #include <unistd.h>
 #include <sys/mman.h>
 
 const char *SERVICE_NAME = "org.amberapi.zxing";
 const char *OBJECT_PATH = "/org/amberapi/zxing";
+
+ZXing::BitMatrix textToMatrix(QString text, int width, int height, int margin, ZXing::BarcodeFormat format=ZXing::BarcodeFormat::QRCode)
+{
+    ZXing::MultiFormatWriter writer(format);
+    writer.setEncoding(ZXing::CharacterSet::UTF8);
+    if (margin >= 0) {
+        writer.setMargin(margin);
+    }
+    return writer.encode(text.toStdString(), width, height);
+}
+
+QImage textToImage(QString text, int width, int height, int margin)
+{
+    ZXing::BitMatrix matrix = textToMatrix(text, width, height, margin);
+    auto bitmap = ZXing::ToMatrix<uint8_t>(matrix);
+    QImage image = QImage(bitmap.data(), bitmap.width(), bitmap.height(), bitmap.width(), QImage::Format::Format_Grayscale8).copy();
+    return image;
+}
 
 Service::Service(QObject *parent)
     : QObject(parent),
@@ -111,7 +135,27 @@ QString Service::decodeFromDescriptor(QDBusUnixFileDescriptor fd,
     return response;
 }
 
+bool Service::encodeToDescriptor(const QDBusUnixFileDescriptor &fd,
+                             const QString &text, int width, int height, int margin)
+{
+    m_autoclose.stop();
+    bool response = false;
+    QImage image = textToImage(text, width, height, margin);
+    QFile mf;
+    if (mf.open(fd.fileDescriptor(), QIODevice::WriteOnly)) {
+        response = image.save(&mf, "PNG");
+        if (!response) {
+            qWarning() << "QImage::save failed.";
+        }
+    } else {
+        qWarning() << "open():" << mf.error();
+    }
+    m_autoclose.start();
+    return response;
+}
+
 void Service::quit()
 {
     QCoreApplication::quit();
 }
+

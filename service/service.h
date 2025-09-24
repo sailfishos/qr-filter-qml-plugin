@@ -10,6 +10,7 @@
 #include <QDBusContext>
 #include <QDBusUnixFileDescriptor>
 #include <QTimer>
+#include <QString>
 
 class Service: public QObject, public QDBusContext
 {
@@ -22,6 +23,8 @@ public:
 public slots:
     QString decodeFromDescriptor(QDBusUnixFileDescriptor fd,
             uint size, int width, int height, int pixelFormat);
+    bool    encodeToDescriptor(const QDBusUnixFileDescriptor &fd,
+            const QString &text, int width, int height, int margin);
     void quit();
 
 private:

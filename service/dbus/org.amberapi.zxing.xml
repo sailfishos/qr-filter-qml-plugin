@@ -6,6 +6,7 @@
  * DBus service for interfacing with Application ID daemon.
  * Copyright (C) 2013 - 2020 Jolla Ltd.
  * Copyright (C) 2020 Open Mobile Platform LLC.
+ * Copyright (C) 2025 Peter G. (nephros)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,6 +33,14 @@
       <arg direction="in" type="i" name="width"/>
       <arg direction="in" type="i" name="height"/>
       <arg direction="in" type="i" name="pixelFormat"/>
+    </method>
+    <method name="encodeToDescriptor">
+      <arg direction="out" type="b" name="result"/>
+      <arg direction="in" type="h" name="descriptor"/>
+      <arg direction="in" type="s" name="text"/>
+      <arg direction="in" type="i" name="width"/>
+      <arg direction="in" type="i" name="height"/>
+      <arg direction="in" type="i" name="margin"/>
     </method>
     <method name="quit">
     </method>
