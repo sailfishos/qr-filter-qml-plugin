@@ -1,6 +1,7 @@
 /**
  * @file service.cpp
  * @copyright 2020 Open Mobile Platform LLC.
+ * @copyright 2026 Jolla Mobile Ltd
  * @author Dmitry Butakov d.butakov@omprussia.ru
  */
 
@@ -17,8 +18,8 @@
 
 #include <ZXing/BarcodeFormat.h>
 #include <ZXing/ReadBarcode.h>
-#include <ZXing/DecodeHints.h>
-#include <ZXing/Result.h>
+#include <ZXing/ReaderOptions.h>
+#include <ZXing/Barcode.h>
 
 #include <unistd.h>
 #include <sys/mman.h>
@@ -61,15 +62,15 @@ static ZXing::ImageFormat convertFormat(int pixelFormat)
 {
     switch (pixelFormat) {
     case QVideoFrame::Format_ARGB32:
-        return ZXing::ImageFormat::XRGB;
+        return ZXing::ImageFormat::ARGB;
     case QVideoFrame::Format_ARGB32_Premultiplied:
-        return ZXing::ImageFormat::XRGB;
+        return ZXing::ImageFormat::ARGB;
     case QVideoFrame::Format_RGB32:
         return ZXing::ImageFormat::RGB;
     case QVideoFrame::Format_BGRA32:
-        return ZXing::ImageFormat::BGRX;
+        return ZXing::ImageFormat::BGRA;
     case QVideoFrame::Format_BGRA32_Premultiplied:
-        return ZXing::ImageFormat::BGRX;
+        return ZXing::ImageFormat::BGRA;
     case QVideoFrame::Format_BGR32:
         return ZXing::ImageFormat::BGR;
     default:
@@ -87,15 +88,15 @@ QString Service::decodeFromDescriptor(QDBusUnixFileDescriptor fd,
         uchar *buf = mf.map(0, size);
 
         if (buf != nullptr) {
-            ZXing::DecodeHints hints;
-            hints.setFormats(ZXing::BarcodeFormat::QRCode);
+            ZXing::ReaderOptions options;
+            options.setFormats(ZXing::BarcodeFormat::QRCode);
             ZXing::ImageFormat format = convertFormat(pixelFormat);
-            hints.setTryInvert(true);
+            options.setTryInvert(true);
 
             if (format != ZXing::ImageFormat::None) {
-                ZXing::Result result = ZXing::ReadBarcode(
-                { buf, width, height, format}, hints);
-                response = QString::fromStdString(result.text());
+                ZXing::ImageView image(buf, width, height, format);
+                ZXing::Barcode barcode = ZXing::ReadBarcode(image, options);
+                response = QString::fromStdString(barcode.text());
             } else {
                 qWarning() << "Input frame format is not supported by ZXing: "
                            << pixelFormat;

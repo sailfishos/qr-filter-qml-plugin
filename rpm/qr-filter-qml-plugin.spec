@@ -9,7 +9,7 @@ BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: pkgconfig(Qt5Quick)
 BuildRequires: pkgconfig(Qt5Multimedia)
 BuildRequires: pkgconfig(Qt5DBus)
-BuildRequires: pkgconfig(zxing) >= 2.0.0
+BuildRequires: pkgconfig(zxing) >= 3.0.0
 
 %description
 QML zxing wrapper with filter for QR-code reading from video stream.
@@ -28,7 +28,6 @@ QML zxing wrapper with filter for QR-code reading from video stream.
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
 %license LICENSE
 %{_libexecdir}/zxing-daemon
 %{_datadir}/dbus-1/services/*.service
