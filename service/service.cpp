@@ -62,13 +62,11 @@ static ZXing::ImageFormat convertFormat(int pixelFormat)
 {
     switch (pixelFormat) {
     case QVideoFrame::Format_ARGB32:
-        return ZXing::ImageFormat::ARGB;
     case QVideoFrame::Format_ARGB32_Premultiplied:
         return ZXing::ImageFormat::ARGB;
     case QVideoFrame::Format_RGB32:
         return ZXing::ImageFormat::RGB;
     case QVideoFrame::Format_BGRA32:
-        return ZXing::ImageFormat::BGRA;
     case QVideoFrame::Format_BGRA32_Premultiplied:
         return ZXing::ImageFormat::BGRA;
     case QVideoFrame::Format_BGR32:

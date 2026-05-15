@@ -1,0 +1,3 @@
+module Amber.Barcode
+plugin barcodeimage
+typeinfo plugins.qmltypes

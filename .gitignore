@@ -9,3 +9,5 @@ moc_*
 .vscode
 service/zxing-daemon
 service/zxing_adaptor.*
+*/*.ts
+*/*.qm
